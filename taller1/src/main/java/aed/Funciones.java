@@ -53,32 +53,63 @@ class Funciones {
     }
     
     int sumatoria(int[] numeros) {
-        // COMPLETAR
-        return 0;
+        int res = 0;
+        for (int i=0; i < numeros.length; i++) {
+            res += numeros[i];
+        }
+        return res;
     }
 
     int busqueda(int[] numeros, int buscado) {
-        // COMPLETAR
-        return 0;
+        int res = 0;
+        for (int i = 0; i < numeros.length; i++) {
+            if (numeros[i] == buscado) {
+                res = i;
+            }
+        }
+        return res;
     }
 
     boolean tienePrimo(int[] numeros) {
-        // COMPLETAR
+        for (int i = 0; i < numeros.length; i++) {
+            if (primo(numeros[i])) {
+                return true;
+            }
+        }
         return false;
     }
 
     boolean todosPares(int[] numeros) {
-        // COMPLETAR
-        return false;
+        for (int i = 0; i < numeros.length; i++) {
+            if (!divideA(2, numeros[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     boolean esPrefijo(String s1, String s2) {
-        // COMPLETAR
-        return false;
+        if (s1.length() > s2.length()) {
+            return false;
+        }
+        for (int i=0; i < s2.length(); i++) {
+            if (i < s1.length() && (s1.charAt(i) != s2.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     boolean esSufijo(String s1, String s2) {
-        // COMPLETAR
-        return false;
+        // Invertir s2 y luego s1 para ejecutar esPrefijo? gfedcba
+        return (esPrefijo(invertirString(s1), invertirString(s2)));
+    }
+    
+    String invertirString(String palabra) {
+        String res = "";
+        for (int i = palabra.length() -1; i > -1; i--) {
+            res += palabra.charAt(i);
+        }
+        return res;
     }
 }
