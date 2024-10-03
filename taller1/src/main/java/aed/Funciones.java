@@ -4,7 +4,6 @@ class Funciones {
     int cuadrado(int x) {
         return x*x;
     }
-
     double distancia(double x, double y) {
         return Math.sqrt((x*x)+(y*y));
     }
