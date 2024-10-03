@@ -1,36 +1,46 @@
 package aed;
 
 public class Recordatorio {
+    private String mensaje;
+    private Fecha fecha;
+    private Horario horario;
 
     public Recordatorio(String mensaje, Fecha fecha, Horario horario) {
-        // Implementar
+        this.mensaje = mensaje;
+        this.fecha = fecha.clonar(); 
+        this.horario = horario.clonar();
     }
 
     public Horario horario() {
-        // Implementar
-        return null;
+        return horario;
     }
 
     public Fecha fecha() {
-        // Implementar
-        return null;
+        return fecha.clonar();
     }
 
     public String mensaje() {
         // Implementar
-        return "";
+        return mensaje;
     }
 
     @Override
     public String toString() {
-        // Implementar
-        return "";
+        return mensaje + " @ " + fecha.dia() + "/" + fecha.mes() + " " + horario.hora() + ":" + horario.minutos(); 
     }
 
     @Override
     public boolean equals(Object otro) {
-        // Implementar
-        return true;
+        //chequear que el objeto no sea nulo ni diferente
+        boolean isNull = otro == null;
+        boolean isDifferentClass = otro.getClass() != this.getClass();
+
+        //if (this == otro) {return true;}
+        if (isDifferentClass || isNull) {return false;}
+        //castear nuevo objeto referencial
+        Recordatorio otroRecordatorio = (Recordatorio) otro;
+        //preguntar mensaje y dentro de cada objeto? o objeto directo?
+        return this.mensaje.equals(otroRecordatorio.mensaje) && this.fecha.equals(otroRecordatorio.fecha) && this.horario.equals(otroRecordatorio.horario);
     }
 
 }

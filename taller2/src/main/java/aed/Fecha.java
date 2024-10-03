@@ -62,4 +62,7 @@ public class Fecha {
         return dias[mes - 1];
     }
 
+    public Fecha clonar(){
+        return new Fecha(this.dia, this.mes);
+    }
 }
