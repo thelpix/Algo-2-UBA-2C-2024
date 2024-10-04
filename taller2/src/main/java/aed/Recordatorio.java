@@ -18,15 +18,12 @@ public class Recordatorio {
     public Fecha fecha() {
         return fecha.clonar();
     }
-
     public String mensaje() {
-        // Implementar
         return mensaje;
     }
-
     @Override
     public String toString() {
-        return mensaje + " @ " + fecha.dia() + "/" + fecha.mes() + " " + horario.hora() + ":" + horario.minutos(); 
+        return mensaje + " @ " + fecha.dia() + "/" + fecha.mes() + " " + horario.hora() + ":" + horario.minutos();
     }
 
     @Override

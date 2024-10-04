@@ -34,7 +34,7 @@ class ArregloRedimensionableDeRecordatorios {
         //Saca el ultimo elemento del array, eliminando la posicion
         Recordatorio[] nuevaListaRecordatorios = new Recordatorio[listaRecordatorios.length - 1];
 
-        for (int i = 0; i < nuevaListaRecordatorios.length; i++) {
+        for (int    i = 0; i < nuevaListaRecordatorios.length; i++) {
             nuevaListaRecordatorios[i] = listaRecordatorios[i];
         }
 
@@ -54,7 +54,6 @@ class ArregloRedimensionableDeRecordatorios {
     }
 
     public ArregloRedimensionableDeRecordatorios copiar() {
-        // Implementar
-        return null;
+        return new ArregloRedimensionableDeRecordatorios(this);
     }
 }
