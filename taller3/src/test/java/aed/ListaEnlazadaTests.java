@@ -286,15 +286,15 @@ class ListaEnlazadaTests {
         lista.agregarAtras(43);
         lista.agregarAtras(44);
 
-        Iterador<Integer> it = lista.iterador();
+        Iterador<Integer> it = lista.iterador(); //i = 0
 
         assertTrue(it.haySiguiente());
         assertFalse(it.hayAnterior());
-        assertEquals(42, it.siguiente());
+        assertEquals(42, it.siguiente()); //i = 1
         assertTrue(it.haySiguiente());
-        assertEquals(43, it.siguiente());
+        assertEquals(43, it.siguiente()); //i = 2
         assertTrue(it.hayAnterior());
-        assertEquals(43, it.anterior());
+        assertEquals(43, it.anterior()); //i = 1
         assertTrue(it.hayAnterior());
         assertEquals(42, it.anterior());
         assertFalse(it.hayAnterior());
