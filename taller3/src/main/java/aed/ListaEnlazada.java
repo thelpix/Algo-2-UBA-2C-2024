@@ -158,12 +158,12 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         }
 
         public boolean haySiguiente() {
-            //que i sea como maximo la penultima posicion (sino no habria ultimo)
+            //que i sea como maximo la ultima posicion (sino no habria ultimo)
 	        return i < longitud;
         }
         
         public boolean hayAnterior() {
-	        return i > 0;
+	        return i > 0; //que i no sea negativo 
         }
 
         public T siguiente() {
