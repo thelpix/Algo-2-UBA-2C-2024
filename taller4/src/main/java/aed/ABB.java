@@ -53,16 +53,16 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     public void insertar(T elem){
         Nodo nodoActual = _raiz;
         Nodo nodoPadre = null;
-        //tengo que ver si pertenece el nodo
+        //tengo que ver si pertenece el nodo para no repetir
         if(pertenece(elem)) {
             return;
         }
+        //cuando el arbol es nulo
         if(_raiz == null) {
             _raiz = new Nodo(elem);
             cardinal++;
             return;
         }
-        //no me gusta que haya copiado el while :(
         while(nodoActual != null){
             nodoPadre = nodoActual;
             //cuando elem < nodoActual.valor
@@ -88,7 +88,6 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     public boolean pertenece(T elem){
-        //si no es t elem, seguir de forma recursiva
         //si es null, entonces es que no esta
         Nodo nodoActual = _raiz;
         while(nodoActual != null)
@@ -111,7 +110,7 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }                       
 
     public void eliminar(T elem){
-        //cuando no esta
+        //cuando no esta no puedo hacer nada
         if(!pertenece(elem)){
             return;
         }
@@ -128,13 +127,10 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
             else{
                 nodoActual = nodoActual.izq;
             }
-        }   
-        if (nodoActual == null) {
-            return;
         }
-        //ineficaz, lo sé
         //una vez encontrado, reemplazar
-        //cuando no tiene hijos (izq y der null), uso AND
+
+        //caso donde no hay hijos
         if(nodoActual.der == null && nodoActual.izq == null) {
             //cuando la raiz no tiene hijos
             if (nodoPadre == null){
@@ -148,7 +144,7 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
                 nodoPadre.der = null;
             }
         }
-        //cuando tiene un hijo (alguno es no null), uso XOR
+        //cuando tiene un solo hijo, uso XOR
         else if (nodoActual.der == null ^ nodoActual.izq == null) {
             //asigno variable temporal hijo
             Nodo hijo;
@@ -161,7 +157,9 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
             //cuando nodoPadre es null, o sea, nodoActual es la _raiz
             if (nodoPadre == null) {
                 _raiz = hijo;
-            } else if (nodoPadre.izq == nodoActual) {
+            }
+            //reemplazar la pos. del hijo del nodo
+            else if (nodoPadre.izq == nodoActual) {
                 nodoPadre.izq = hijo;
             } else {
                 nodoPadre.der = hijo;
@@ -170,8 +168,8 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         }
         //cuando tiene 2 hijos (los dos no null), los anteriores fueron FALSOS
         //tengo que reemplazar el nodoActual por el máximo de nodoActual.izq
-        //busco el maximo
         else{
+            //busco el maximo
             Nodo maxDelMinimo = nodoActual.izq;
             Nodo maxDelMinimoPadre = nodoActual;
 
@@ -196,8 +194,6 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     public String toString(){
-        //podria imprimir minimos, y luego borrar el minimo para que me de el siguiente hasta que este vacio
-
         String stringLista = "{" + imprimirNodos(this._raiz);
         //no esta vacio
         if (stringLista.length() > 1){
@@ -208,13 +204,14 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     private String imprimirNodos(Nodo nodo){
+        //cuando ya completo un subarbol
         if(nodo == null){
             return "";
         }
         String imprimir = "";
-        imprimir += String.valueOf(imprimirNodos(nodo.izq)); //primero por izq
-        imprimir += String.valueOf(nodo.valor) + ","; //el del medio :#
-        imprimir += String.valueOf(imprimirNodos(nodo.der)); //luego los der
+        imprimir += String.valueOf(imprimirNodos(nodo.izq)); //primero imprimo todo el subarbol menor desde su hoja a raiz
+        imprimir += String.valueOf(nodo.valor) + ","; //sus valores, imrpimiendo los mas chicos hasta el nodo original (por prioridad)
+        imprimir += String.valueOf(imprimirNodos(nodo.der)); //luego los derechos
         return imprimir;
     }
 
