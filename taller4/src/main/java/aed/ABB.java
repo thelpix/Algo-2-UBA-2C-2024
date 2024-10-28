@@ -208,7 +208,6 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     private String imprimirNodos(Nodo nodo){
-        //tendria que tener una copia de arbol para esto no?
         if(nodo == null){
             return "";
         }
