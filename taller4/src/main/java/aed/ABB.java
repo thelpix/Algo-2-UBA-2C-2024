@@ -45,7 +45,7 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         Nodo nodoActual = _raiz;
         //Si hay uno mas grande que el que tengo ahora
         while(nodoActual.der != null){
-            nodoActual = nodoActual.izq;
+            nodoActual = nodoActual.der;
         }
         return nodoActual.valor;
     }
@@ -115,54 +115,144 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         if(!pertenece(elem)){
             return;
         }
+
         Nodo nodoActual = _raiz;
-        Nodo nodoHijoIzq = null; //no se si hace falta
-        Nodo nodoHijoDer = null; //no se si hace falta, veo
         Nodo nodoPadre = null;
+
         //buscar el nodo a borrar
-        while(nodoActual.valor != elem) {
-            nodoPadre = nodoActual
+        while(nodoActual != null && nodoActual.valor.compareTo(elem) != 0) {
+            nodoPadre = nodoActual;
             if(elem.compareTo(nodoActual.valor) > 0){
                 nodoActual = nodoActual.der;
             }
             else{
                 nodoActual = nodoActual.izq;
             }
+        }   
+        if (nodoActual == null) {
+            return;
         }
-        //desvincular al nodo padre si su nodo hijo no tiene hijos
-        if(nodoActual.izq == null && nodoActual.der == null){
-            nodoActual = null;
+        //ineficaz, lo sé
+        //una vez encontrado, reemplazar
+        //cuando no tiene hijos (izq y der null), uso AND
+        if(nodoActual.der == null && nodoActual.izq == null) {
+            //cuando la raiz no tiene hijos
+            if (nodoPadre == null){
+                _raiz = null;
+            }
+            //¿como se que el nodoActual esta en la derecha o izq del nodoPadre?
+            else if(nodoPadre.izq == nodoActual){
+                nodoPadre.izq = null;
+            }
+            else{
+                nodoPadre.der = null;
+            }
         }
-        //flojera luego corrijo esto
-        if(nodoActual.izq != null && nodoActual.der == null){
+        //cuando tiene un hijo (alguno es no null), uso XOR
+        else if (nodoActual.der == null ^ nodoActual.izq == null) {
+            //asigno variable temporal hijo
+            Nodo hijo;
+            if(nodoActual.izq != null){
+                hijo = nodoActual.izq;
+            }
+            else{
+                hijo = nodoActual.der;
+            }
+            //cuando nodoPadre es null, o sea, nodoActual es la _raiz
+            if (nodoPadre == null) {
+                _raiz = hijo;
+            } else if (nodoPadre.izq == nodoActual) {
+                nodoPadre.izq = hijo;
+            } else {
+                nodoPadre.der = hijo;
+            }
 
         }
-        if(elem.compareTo(nodoPadre.valor) > 0){
-            nodoPadre.der = null;
-        }
+        //cuando tiene 2 hijos (los dos no null), los anteriores fueron FALSOS
+        //tengo que reemplazar el nodoActual por el máximo de nodoActual.izq
+        //busco el maximo
         else{
-            nodoPadre.izq = null;
+            Nodo maxDelMinimo = nodoActual.izq;
+            Nodo maxDelMinimoPadre = nodoActual;
+
+            while(maxDelMinimo.der != null){
+                maxDelMinimoPadre = maxDelMinimo;
+                maxDelMinimo = maxDelMinimo.der;
+            }
+
+            //remplazo el valor del nodoActual con MaxDelMinimo
+            nodoActual.valor = maxDelMinimo.valor;
+
+            //si el Maximo del Minimo tiene un hijo izq, lo conecta al Padre
+            if (maxDelMinimoPadre != nodoActual) {
+                maxDelMinimoPadre.der = maxDelMinimo.izq;
+            }
+            else{
+                maxDelMinimoPadre.izq = maxDelMinimo.izq;
+            }
         }
-            //cuando no tiene hijos
-            //cuando tiene un hijo
-            //cuando tiene 2 hijos
+
         cardinal--;
-        throw new UnsupportedOperationException("No implementada aun");
     }
 
     public String toString(){
-        throw new UnsupportedOperationException("No implementada aun");
+        //podria imprimir minimos, y luego borrar el minimo para que me de el siguiente hasta que este vacio
+
+        String stringLista = "{" + imprimirNodos(this._raiz);
+        //no esta vacio
+        if (stringLista.length() > 1){
+            stringLista = stringLista.substring(0, stringLista.length()-1);
+        }
+        stringLista += "}";
+        return stringLista;
+    }
+
+    private String imprimirNodos(Nodo nodo){
+        //tendria que tener una copia de arbol para esto no?
+        if(nodo == null){
+            return "";
+        }
+        String imprimir = "";
+        imprimir += String.valueOf(imprimirNodos(nodo.izq)); //primero por izq
+        imprimir += String.valueOf(nodo.valor) + ","; //el del medio :#
+        imprimir += String.valueOf(imprimirNodos(nodo.der)); //luego los der
+        return imprimir;
     }
 
     private class ABB_Iterador implements Iterador<T> {
+        //clase pila 
+        private Stack<Nodo> pila = new Stack<Nodo>();
         private Nodo _actual;
 
+        public ABB_Iterador(){
+            _actual = _raiz;
+            //cargo los nodos del subarbol izq.
+            while(_actual != null){
+                pila.push(_actual);
+                _actual = _actual.izq;
+            }
+        }
+
         public boolean haySiguiente() {            
-            throw new UnsupportedOperationException("No implementada aun");
+            return !pila.isEmpty();
         }
     
         public T siguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            // saco el sig. nodo de la pila
+            Nodo nodo = pila.pop();
+            T result = nodo.valor;
+
+            // si tiene subarbol derecho, apilo los nodos izq.
+            if (nodo.der != null){
+                nodo = nodo.der;
+
+                // apilo los nodos del subarbol izq. del nodo que agarre
+                while(nodo != null){
+                    pila.push(nodo);
+                    nodo = nodo.izq;
+                }
+            }
+            return result;
         }
     }
 
